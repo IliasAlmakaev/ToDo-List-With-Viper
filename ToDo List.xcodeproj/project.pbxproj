@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		284B8ED82CF8EBD700608DD0 /* TaskDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284B8ED72CF8EBD700608DD0 /* TaskDetailsViewController.swift */; };
 		288CD64E2CF7D394003EA26E /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288CD64D2CF7D394003EA26E /* Todo.swift */; };
 		288CD6512CF7E7C6003EA26E /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288CD6502CF7E7C6003EA26E /* TaskCell.swift */; };
 		288CD6532CF80AFC003EA26E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288CD6522CF80AFC003EA26E /* StorageManager.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		284B8ED72CF8EBD700608DD0 /* TaskDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewController.swift; sourceTree = "<group>"; };
 		288CD64D2CF7D394003EA26E /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		288CD6502CF7E7C6003EA26E /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		288CD6522CF80AFC003EA26E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -59,6 +61,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		284B8ED62CF8E84C00608DD0 /* TaskDetails */ = {
+			isa = PBXGroup;
+			children = (
+				284B8ED72CF8EBD700608DD0 /* TaskDetailsViewController.swift */,
+			);
+			path = TaskDetails;
+			sourceTree = "<group>";
+		};
 		288CD64F2CF7E7AB003EA26E /* TaskCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				28D79DA92CEF950D00D985A1 /* TaskList */,
+				284B8ED62CF8E84C00608DD0 /* TaskDetails */,
 				28D79DAA2CEF951A00D985A1 /* Services */,
 				28D79D6A2CEF91FC00D985A1 /* Storyboard */,
 				28D79D6C2CEF923400D985A1 /* Models */,
@@ -245,6 +256,7 @@
 				28C347392CF8D0FF00387A44 /* TaskListConfigurator.swift in Sources */,
 				28D79DAC2CEF953500D985A1 /* NetworkManager.swift in Sources */,
 				28D79D552CEF91BC00D985A1 /* SceneDelegate.swift in Sources */,
+				284B8ED82CF8EBD700608DD0 /* TaskDetailsViewController.swift in Sources */,
 				28D79D5D2CEF91BC00D985A1 /* ToDo_List.xcdatamodeld in Sources */,
 				288CD6532CF80AFC003EA26E /* StorageManager.swift in Sources */,
 				28C347322CF8B5C800387A44 /* TaskListInteractor.swift in Sources */,

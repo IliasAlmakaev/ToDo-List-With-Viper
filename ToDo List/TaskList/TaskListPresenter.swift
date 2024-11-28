@@ -33,6 +33,9 @@ extension TaskListPresenter: TaskListInteractorOutputProtocol {
   func tasksDidReceive(with dataStore: TaskListDataStore) {
     self.dataStore = dataStore
     let rows: [TaskCellViewModel] = dataStore.tasks.map { TaskCellViewModel(task: $0) }
+    let taskCountText = "\(rows.count) задач (и)"
+    
     view.reloadData(for: rows)
+    view.setTaskCount(withText: taskCountText)
   }
 }

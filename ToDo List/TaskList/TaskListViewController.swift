@@ -9,6 +9,7 @@ import UIKit
 
 protocol TaskListViewInputProtocol: AnyObject {
   func reloadData(for row: [TaskCellViewModel])
+  func setTaskCount(withText text: String)
 }
 
 protocol TaskListViewOutputProtocol {
@@ -18,6 +19,7 @@ protocol TaskListViewOutputProtocol {
 final class TaskListViewController: UIViewController {
   
   @IBOutlet weak var tableView: UITableView!
+  @IBOutlet weak var taskCountLabel: UILabel!
   
   var presenter: TaskListViewOutputProtocol!
   
@@ -30,6 +32,9 @@ final class TaskListViewController: UIViewController {
     configurator.configure(withView: self)
     activityIndicator = showActivityIndicator(in: view)
     presenter.viewDidLoad()
+  }
+  
+  @IBAction func createTaskButtonPressed() {
   }
   
   private func showActivityIndicator(in view: UIView) -> UIActivityIndicatorView {
@@ -72,6 +77,10 @@ extension TaskListViewController: TaskListViewInputProtocol {
     self.rows = rows
     tableView.reloadData()
     activityIndicator?.stopAnimating()
+  }
+  
+  func setTaskCount(withText text: String) {
+    taskCountLabel.text = text
   }
 }
 
