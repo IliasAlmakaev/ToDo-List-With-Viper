@@ -22,12 +22,26 @@ final class TaskListViewController: UIViewController {
   var presenter: TaskListViewOutputProtocol!
   
   private let configurator: TaskListConfiguratorInputProtocol = TaskListConfigurator()
+  private var activityIndicator: UIActivityIndicatorView?
   private var rows: [TaskCellViewModelProtocol] = []
 
   override func viewDidLoad() {
     super.viewDidLoad()
     configurator.configure(withView: self)
+    activityIndicator = showActivityIndicator(in: view)
     presenter.viewDidLoad()
+  }
+  
+  private func showActivityIndicator(in view: UIView) -> UIActivityIndicatorView {
+    let activityIndicator = UIActivityIndicatorView(style: .large)
+    activityIndicator.color = .white
+    activityIndicator.startAnimating()
+    activityIndicator.center = view.center
+    activityIndicator.hidesWhenStopped = true
+    
+    view.addSubview(activityIndicator)
+    
+    return activityIndicator
   }
 }
 
@@ -57,6 +71,7 @@ extension TaskListViewController: TaskListViewInputProtocol {
   func reloadData(for rows: [TaskCellViewModel]) {
     self.rows = rows
     tableView.reloadData()
+    activityIndicator?.stopAnimating()
   }
 }
 
