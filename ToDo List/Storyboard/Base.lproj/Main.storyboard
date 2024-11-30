@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -88,8 +87,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QUu-LM-Xy6">
                                 <rect key="frame" x="0.0" y="813" width="414" height="83"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="7 задач" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qXh-nu-Dpf">
-                                        <rect key="frame" x="183.5" y="33.5" width="47.5" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 задач (и)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qXh-nu-Dpf">
+                                        <rect key="frame" x="172.5" y="33.5" width="69.5" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -131,7 +130,9 @@
                             <constraint firstItem="QUu-LM-Xy6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="yhf-wP-fWr"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Задачи" id="AzD-kt-OvK"/>
+                    <navigationItem key="navigationItem" title="Задачи" id="AzD-kt-OvK">
+                        <barButtonItem key="backBarButtonItem" title="Назад" id="Z7l-9S-u7B"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="ufu-aB-3Pu" id="fEX-Ei-AIg"/>
                         <outlet property="taskCountLabel" destination="qXh-nu-Dpf" id="W8Y-8I-uvk"/>
@@ -141,21 +142,66 @@
             </objects>
             <point key="canvasLocation" x="939.13043478260875" y="43.526785714285715"/>
         </scene>
-        <!--View Controller-->
+        <!--Task Details View Controller-->
         <scene sceneID="417-gr-CKB">
             <objects>
-                <viewController id="DMP-6u-MPT" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TaskDetailsViewController" id="DMP-6u-MPT" customClass="TaskDetailsViewController" customModule="ToDo_List" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="has-cZ-cgd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="sWY-FF-Zm5">
+                                <rect key="frame" x="20" y="133" width="374" height="763"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21/12/24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uWW-mz-d9o">
+                                <rect key="frame" x="20" y="102.5" width="48" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Укажие задачу" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9HD-4b-fYT">
+                                <rect key="frame" x="20" y="44" width="374" height="50.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="34"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="bE6-Lz-jJ2"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="sWY-FF-Zm5" secondAttribute="bottom" id="0je-Tp-Z2i"/>
+                            <constraint firstItem="bE6-Lz-jJ2" firstAttribute="trailing" secondItem="9HD-4b-fYT" secondAttribute="trailing" constant="20" id="5zU-3c-90q"/>
+                            <constraint firstItem="uWW-mz-d9o" firstAttribute="top" secondItem="9HD-4b-fYT" secondAttribute="bottom" constant="8" id="HBI-zf-Gua"/>
+                            <constraint firstItem="uWW-mz-d9o" firstAttribute="leading" secondItem="bE6-Lz-jJ2" secondAttribute="leading" constant="20" id="JlZ-5g-uiR"/>
+                            <constraint firstItem="bE6-Lz-jJ2" firstAttribute="trailing" secondItem="sWY-FF-Zm5" secondAttribute="trailing" constant="20" id="QaD-ZR-dRl"/>
+                            <constraint firstItem="9HD-4b-fYT" firstAttribute="leading" secondItem="bE6-Lz-jJ2" secondAttribute="leading" constant="20" id="iPJ-7v-2Cj"/>
+                            <constraint firstItem="9HD-4b-fYT" firstAttribute="top" secondItem="bE6-Lz-jJ2" secondAttribute="top" id="li4-Fb-x5F"/>
+                            <constraint firstItem="sWY-FF-Zm5" firstAttribute="top" secondItem="uWW-mz-d9o" secondAttribute="bottom" constant="16" id="nxN-j5-ZxM"/>
+                            <constraint firstItem="sWY-FF-Zm5" firstAttribute="leading" secondItem="bE6-Lz-jJ2" secondAttribute="leading" constant="20" id="xe7-iq-iHR"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="r72-Gj-BxR"/>
+                    <navigationItem key="navigationItem" id="r72-Gj-BxR">
+                        <barButtonItem key="rightBarButtonItem" title="Сохранить" id="uUs-GH-86K">
+                            <connections>
+                                <action selector="saveButtonPressed:" destination="DMP-6u-MPT" id="oK6-gm-lRh"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="dateLabel" destination="uWW-mz-d9o" id="ZPh-H9-4R6"/>
+                        <outlet property="descriptionTextView" destination="sWY-FF-Zm5" id="Bp0-nQ-JjH"/>
+                        <outlet property="saveButton" destination="uUs-GH-86K" id="TkV-JY-flI"/>
+                        <outlet property="titleTextField" destination="9HD-4b-fYT" id="IRW-is-znk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lVI-Vb-HuX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1717" y="44"/>
+            <point key="canvasLocation" x="2177" y="44"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4qZ-9n-aYg">
@@ -179,8 +225,5 @@
     <resources>
         <image name="square.and.pencil" catalog="system" width="128" height="115"/>
         <image name="unselectedButton" width="24" height="24"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

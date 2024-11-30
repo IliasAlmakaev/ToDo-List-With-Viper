@@ -13,6 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     guard let _ = (scene as? UIWindowScene) else { return }
+    UIView.appearance().tintColor = #colorLiteral(red: 0.9993364215, green: 0.8632268906, blue: 0, alpha: 1)
     
     let navBarAppearance = UINavigationBarAppearance()
     navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]

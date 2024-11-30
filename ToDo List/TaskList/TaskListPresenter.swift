@@ -26,6 +26,12 @@ final class TaskListPresenter: TaskListViewOutputProtocol {
   func viewDidLoad() {
     interactor.fetchTasks()
   }
+  
+  func createTaskButtonPressed() {
+    let lastTaskId = dataStore?.tasks.last?.id ?? 0
+    let creationTaskId = lastTaskId != 0 ? lastTaskId + 1 : 0
+    router.openTaskDetailsViewController(with: nil, taskId: Int(creationTaskId))
+  }
 }
 
 // MARK: - TaskListInteractorOutputProtocol

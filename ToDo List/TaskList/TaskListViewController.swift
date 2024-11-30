@@ -14,6 +14,12 @@ protocol TaskListViewInputProtocol: AnyObject {
 
 protocol TaskListViewOutputProtocol {
   func viewDidLoad()
+  func createTaskButtonPressed()
+}
+
+protocol TaskDetailsViewControllerDelegate: AnyObject {
+  func saveTask(_ task: Task)
+  func editTask(_ task: Task)
 }
 
 final class TaskListViewController: UIViewController {
@@ -35,6 +41,7 @@ final class TaskListViewController: UIViewController {
   }
   
   @IBAction func createTaskButtonPressed() {
+    presenter.createTaskButtonPressed()
   }
   
   private func showActivityIndicator(in view: UIView) -> UIActivityIndicatorView {
@@ -81,6 +88,16 @@ extension TaskListViewController: TaskListViewInputProtocol {
   
   func setTaskCount(withText text: String) {
     taskCountLabel.text = text
+  }
+}
+
+extension TaskListViewController: TaskDetailsViewControllerDelegate {
+  func saveTask(_ task: Task) {
+    
+  }
+  
+  func editTask(_ task: Task) {
+    
   }
 }
 

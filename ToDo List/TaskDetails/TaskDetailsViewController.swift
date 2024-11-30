@@ -7,13 +7,70 @@
 
 import UIKit
 
-class TaskDetailsViewController: UIViewController {
+protocol TaskDetailsViewInputProtocol: AnyObject {
+  func setupUI(isCreateTask: Bool, dateText: String)
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+protocol TaskDetailsViewOutputProtocol {
+  init(view: TaskDetailsViewInputProtocol)
+  func viewDidLoad()
+  func createTask(
+    title: String,
+    descriptionText: String?,
+    creationDate: Date,
+    completed: Bool
+  )
+}
 
-        // Do any additional setup after loading the view.
+final class TaskDetailsViewController: UIViewController {
+  
+  @IBOutlet weak var titleTextField: UITextField!
+  @IBOutlet weak var descriptionTextView: UITextView!
+  
+  @IBOutlet weak var dateLabel: UILabel!
+  
+  @IBOutlet weak var saveButton: UIBarButtonItem!
+  
+  var presenter: TaskDetailsViewOutputProtocol!
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    presenter.viewDidLoad()
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesBegan(touches, with: event)
+    view.endEditing(true)
+  }
+  
+  @IBAction func saveButtonPressed(_ sender: UIBarButtonItem) {
+    guard let titleText = titleTextField.text else { return }
+    
+    presenter.createTask(
+      title: titleText,
+      descriptionText: descriptionTextView.text,
+      creationDate: Date(),
+      completed: false
+    )
+  }
+  
+  private func validateTextField() {
+    let textFieldAction = UIAction { [unowned self] _ in
+      guard let text = titleTextField.text else { return }
+      saveButton.isEnabled = !text.isEmpty
     }
+    
+    titleTextField.addAction(textFieldAction, for: .editingChanged)
+  }
+}
 
-
+// MARK: - TaskDetailsViewInputProtocol
+extension TaskDetailsViewController: TaskDetailsViewInputProtocol {
+  func setupUI(isCreateTask: Bool, dateText: String) {
+    if isCreateTask {
+      saveButton.isEnabled = false
+      dateLabel.text = dateText
+      validateTextField()
+    }
+  }
 }
