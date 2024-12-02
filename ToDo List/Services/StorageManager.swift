@@ -47,6 +47,17 @@ final class StorageManager {
     saveContext()
   }
   
+  func fetchData(completion: (Result<[Task], Error>) -> Void) {
+    let fetchRequest = Task.fetchRequest()
+    
+    do {
+      let tasks = try viewContext.fetch(fetchRequest)
+      completion(.success(tasks))
+    } catch let error {
+      completion(.failure(error))
+    }
+  }
+  
   // MARK: - Core Data Saving support
   func saveContext () {
       let context = persistentContainer.viewContext

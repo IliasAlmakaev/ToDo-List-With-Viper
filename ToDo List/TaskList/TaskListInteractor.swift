@@ -25,13 +25,12 @@ final class TaskListInteractor: TaskListInteractorInputProtocol {
   }
   
   func fetchTasks() {
-    NetworkManager.shared.fetchData { [unowned self] result in
-      switch result {
-      case .success(let todos):
-        saveTodos(todos)
-      case .failure(let error):
-        print(error.localizedDescription)
-      }
+    let isNotFirstFetchTasks = UserDefaults.standard.bool(forKey: "isNotFirstFetchTasks")
+    
+    if !isNotFirstFetchTasks {
+      fetchTodosFromNetwork()
+    } else {
+      fetchTodosFromCoreData()
     }
   }
   
@@ -55,5 +54,29 @@ final class TaskListInteractor: TaskListInteractorInputProtocol {
     
     let dataStore = TaskListDataStore(tasks: tasks)
     presenter.tasksDidReceive(with: dataStore)
+  }
+  
+  private func fetchTodosFromNetwork() {
+    NetworkManager.shared.fetchData { [unowned self] result in
+      UserDefaults.standard.set(true, forKey: "isNotFirstFetchTasks")
+      switch result {
+      case .success(let todos):
+        saveTodos(todos)
+      case .failure(let error):
+        print(error.localizedDescription)
+      }
+    }
+  }
+  
+  private func fetchTodosFromCoreData() {
+    storageManager.fetchData { result in
+      switch result {
+      case .success(let tasks):
+        let dataStore = TaskListDataStore(tasks: tasks)
+        presenter.tasksDidReceive(with: dataStore)
+      case .failure(let error):
+        print(error.localizedDescription)
+      }
+    }
   }
 }

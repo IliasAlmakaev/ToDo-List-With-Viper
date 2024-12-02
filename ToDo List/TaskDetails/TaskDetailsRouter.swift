@@ -20,6 +20,6 @@ final class TaskDetailsRouter: TaskDetailsRouterInputProtocol {
   }
   
   func dismiss() {
-    view.dismiss(animated: true, completion: nil)
+    view.navigationController?.popViewController(animated: true)
   }
 }

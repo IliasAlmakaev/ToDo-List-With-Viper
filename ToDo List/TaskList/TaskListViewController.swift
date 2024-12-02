@@ -8,13 +8,15 @@
 import UIKit
 
 protocol TaskListViewInputProtocol: AnyObject {
-  func reloadData(for row: [TaskCellViewModel])
+  func reloadData(for rows: [TaskCellViewModel])
   func setTaskCount(withText text: String)
+  func addTask(for row: TaskCellViewModel)
 }
 
 protocol TaskListViewOutputProtocol {
   func viewDidLoad()
   func createTaskButtonPressed()
+  func addTask(_ task: Task)
 }
 
 protocol TaskDetailsViewControllerDelegate: AnyObject {
@@ -89,11 +91,16 @@ extension TaskListViewController: TaskListViewInputProtocol {
   func setTaskCount(withText text: String) {
     taskCountLabel.text = text
   }
+  
+  func addTask(for row: TaskCellViewModel) {
+    rows.append(row)
+    tableView.reloadData()
+  }
 }
 
 extension TaskListViewController: TaskDetailsViewControllerDelegate {
   func saveTask(_ task: Task) {
-    
+    presenter.addTask(task)
   }
   
   func editTask(_ task: Task) {

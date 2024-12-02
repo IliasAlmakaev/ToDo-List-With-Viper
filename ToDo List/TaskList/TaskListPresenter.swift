@@ -8,7 +8,7 @@
 import Foundation
 
 struct TaskListDataStore {
-  let tasks: [Task]
+  var tasks: [Task]
 }
 
 final class TaskListPresenter: TaskListViewOutputProtocol {
@@ -32,6 +32,18 @@ final class TaskListPresenter: TaskListViewOutputProtocol {
     let creationTaskId = lastTaskId != 0 ? lastTaskId + 1 : 0
     router.openTaskDetailsViewController(with: nil, taskId: Int(creationTaskId))
   }
+  
+  func addTask(_ task: Task) {
+    dataStore?.tasks.append(task)
+    let row = TaskCellViewModel(task: task)
+    view.addTask(for: row)
+    setTaskCount(dataStore?.tasks.count ?? 0)
+  }
+  
+  private func setTaskCount(_ taskCount: Int) {
+    let taskCountText = "\(taskCount) задач (и)"
+    view.setTaskCount(withText: taskCountText)
+  }
 }
 
 // MARK: - TaskListInteractorOutputProtocol
@@ -39,9 +51,8 @@ extension TaskListPresenter: TaskListInteractorOutputProtocol {
   func tasksDidReceive(with dataStore: TaskListDataStore) {
     self.dataStore = dataStore
     let rows: [TaskCellViewModel] = dataStore.tasks.map { TaskCellViewModel(task: $0) }
-    let taskCountText = "\(rows.count) задач (и)"
     
     view.reloadData(for: rows)
-    view.setTaskCount(withText: taskCountText)
+    setTaskCount(rows.count)
   }
 }

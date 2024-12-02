@@ -19,6 +19,7 @@ protocol TaskDetailsInteractorInputProtocol {
 
 protocol TaskDetailsInteractorOutputProtocol: AnyObject {
   func setupUI(with dataStore: TaskDetailsDataStore)
+  func dismiss()
 }
 
 final class TaskDetailsInteractor: TaskDetailsInteractorInputProtocol {
@@ -65,8 +66,9 @@ final class TaskDetailsInteractor: TaskDetailsInteractorInputProtocol {
       fullDescription: descriptionText,
       creationDate: creationDate,
       completed: completed
-    ) { [weak self] task in
-      
+    ) { task in
+      delegate?.saveTask(task)
+      presenter.dismiss()
     }
   }
 }

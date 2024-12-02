@@ -47,4 +47,8 @@ extension TaskDetailsPresenter: TaskDetailsInteractorOutputProtocol {
   func setupUI(with dataStore: TaskDetailsDataStore) {
     view.setupUI(isCreateTask: dataStore.isCreateTask, dateText: dataStore.dateText)
   }
+  
+  func dismiss() {
+    router.dismiss()
+  }
 }
