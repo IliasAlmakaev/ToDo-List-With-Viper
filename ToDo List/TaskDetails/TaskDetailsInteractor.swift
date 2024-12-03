@@ -15,6 +15,7 @@ protocol TaskDetailsInteractorInputProtocol {
     creationDate: Date,
     completed: Bool
   )
+  func editTask(title: String, descriptionText: String?)
 }
 
 protocol TaskDetailsInteractorOutputProtocol: AnyObject {
@@ -47,7 +48,8 @@ final class TaskDetailsInteractor: TaskDetailsInteractorInputProtocol {
   func setupUI() {
     let taskDetailsDataStore = TaskDetailsDataStore(
       isCreateTask: taskId != nil,
-      dateText: Date().formattedDate
+      dateText: task?.creationDate ?? Date(),
+      task: task
     )
     
     presenter.setupUI(with: taskDetailsDataStore)
@@ -70,5 +72,13 @@ final class TaskDetailsInteractor: TaskDetailsInteractorInputProtocol {
       delegate?.saveTask(task)
       presenter.dismiss()
     }
+  }
+  
+  func editTask(title: String, descriptionText: String?) {
+    guard let task = task,
+          title != task.todo || descriptionText != task.fullDescription else { return }
+    
+    storageManager.editTaskText(task, title: title, description: descriptionText ?? "")
+    delegate?.editTask(task)
   }
 }

@@ -9,7 +9,8 @@ import Foundation
 
 struct TaskDetailsDataStore {
   let isCreateTask: Bool
-  let dateText: String
+  let dateText: Date
+  var task: Task? = nil
 }
 
 final class TaskDetailsPresenter: TaskDetailsViewOutputProtocol {
@@ -41,11 +42,20 @@ final class TaskDetailsPresenter: TaskDetailsViewOutputProtocol {
       completed: completed
     )
   }
+  
+  func editTask(title: String, descriptionText: String?) {
+    interactor.editTask(title: title, descriptionText: descriptionText)
+  }
 }
 
 extension TaskDetailsPresenter: TaskDetailsInteractorOutputProtocol {
   func setupUI(with dataStore: TaskDetailsDataStore) {
-    view.setupUI(isCreateTask: dataStore.isCreateTask, dateText: dataStore.dateText)
+    view.setupUI(
+      isCreateTask: dataStore.isCreateTask,
+      dateText: dataStore.dateText.formattedDate,
+      title: dataStore.task?.todo,
+      description: dataStore.task?.fullDescription
+    )
   }
   
   func dismiss() {

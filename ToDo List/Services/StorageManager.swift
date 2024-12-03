@@ -47,6 +47,12 @@ final class StorageManager {
     saveContext()
   }
   
+  func editTaskText(_ task: Task, title: String, description: String) {
+    task.todo = title
+    task.fullDescription = description
+    saveContext()
+  }
+  
   func fetchData(completion: (Result<[Task], Error>) -> Void) {
     let fetchRequest = Task.fetchRequest()
     

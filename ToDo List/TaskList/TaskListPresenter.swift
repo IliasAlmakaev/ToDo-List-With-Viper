@@ -9,6 +9,7 @@ import Foundation
 
 struct TaskListDataStore {
   var tasks: [Task]
+  var selectedIndexRow: Int? = nil
 }
 
 final class TaskListPresenter: TaskListViewOutputProtocol {
@@ -38,6 +39,19 @@ final class TaskListPresenter: TaskListViewOutputProtocol {
     let row = TaskCellViewModel(task: task)
     view.addTask(for: row)
     setTaskCount(dataStore?.tasks.count ?? 0)
+  }
+  
+  func editTask(withIndexRow indexRow: Int) {
+    let task = dataStore?.tasks[indexRow]
+    dataStore?.selectedIndexRow = indexRow
+    router.openTaskDetailsViewController(with: task, taskId: nil)
+  }
+  
+  func updateTask(_ task: Task) {
+    guard let selectedIndexRow = dataStore?.selectedIndexRow else { return }
+    let row = TaskCellViewModel(task: task)
+    dataStore?.tasks[selectedIndexRow] = task
+    view.updateTask(for: row, withIndexRow: selectedIndexRow)
   }
   
   private func setTaskCount(_ taskCount: Int) {

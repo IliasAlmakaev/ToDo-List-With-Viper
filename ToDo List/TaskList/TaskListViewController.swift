@@ -11,12 +11,15 @@ protocol TaskListViewInputProtocol: AnyObject {
   func reloadData(for rows: [TaskCellViewModel])
   func setTaskCount(withText text: String)
   func addTask(for row: TaskCellViewModel)
+  func updateTask(for row: TaskCellViewModel, withIndexRow indexRow: Int)
 }
 
 protocol TaskListViewOutputProtocol {
   func viewDidLoad()
   func createTaskButtonPressed()
   func addTask(_ task: Task)
+  func editTask(withIndexRow indexRow: Int)
+  func updateTask(_ task: Task)
 }
 
 protocol TaskDetailsViewControllerDelegate: AnyObject {
@@ -74,11 +77,42 @@ extension TaskListViewController: UITableViewDataSource {
   }
 }
 
+// MARK: - UITableViewDelegate
 extension TaskListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     rows[indexPath.row].cellHeight
   }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    
+  }
+  
+  func tableView(
+    _ tableView: UITableView,
+    contextMenuConfigurationForRowAt indexPath: IndexPath,
+    point: CGPoint
+  ) -> UIContextMenuConfiguration? {
+    
+    let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { menuElements in
+      
+      let editAction = UIAction(title: "Редактировать", image: UIImage(named: "edit")) { [unowned self] action in
+        presenter.editTask(withIndexRow: indexPath.row)
+      }
+      
+      let deleteAction = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { action in
+        
+      }
+      
+      let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [editAction, deleteAction])
+      
+      return menu
+    }
+    
+    return configuration
+  }
 }
+
 
 // MARK: - TaskListViewInputProtocol
 extension TaskListViewController: TaskListViewInputProtocol {
@@ -96,15 +130,21 @@ extension TaskListViewController: TaskListViewInputProtocol {
     rows.append(row)
     tableView.reloadData()
   }
+  
+  func updateTask(for row: TaskCellViewModel, withIndexRow indexRow: Int) {
+    rows[indexRow] = row
+    tableView.reloadData()
+  }
 }
 
+// MARK: - TaskDetailsViewControllerDelegate
 extension TaskListViewController: TaskDetailsViewControllerDelegate {
   func saveTask(_ task: Task) {
     presenter.addTask(task)
   }
   
   func editTask(_ task: Task) {
-    
+    presenter.updateTask(task)
   }
 }
 

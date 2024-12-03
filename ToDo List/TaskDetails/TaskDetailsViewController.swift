@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TaskDetailsViewInputProtocol: AnyObject {
-  func setupUI(isCreateTask: Bool, dateText: String)
+  func setupUI(isCreateTask: Bool, dateText: String, title: String?, description: String?)
 }
 
 protocol TaskDetailsViewOutputProtocol {
@@ -20,6 +20,7 @@ protocol TaskDetailsViewOutputProtocol {
     creationDate: Date,
     completed: Bool
   )
+  func editTask(title: String, descriptionText: String?)
 }
 
 final class TaskDetailsViewController: UIViewController {
@@ -36,6 +37,17 @@ final class TaskDetailsViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     presenter.viewDidLoad()
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    
+    if self.isMovingFromParent {
+      presenter.editTask(
+        title: titleTextField.text ?? "",
+        descriptionText: descriptionTextView.text
+      )
+    }
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -66,11 +78,16 @@ final class TaskDetailsViewController: UIViewController {
 
 // MARK: - TaskDetailsViewInputProtocol
 extension TaskDetailsViewController: TaskDetailsViewInputProtocol {
-  func setupUI(isCreateTask: Bool, dateText: String) {
+  func setupUI(isCreateTask: Bool, dateText: String, title: String?, description: String?) {
     if isCreateTask {
       saveButton.isEnabled = false
       dateLabel.text = dateText
       validateTextField()
+    } else {
+      saveButton.setValue(true, forKey: "hidden")
+      dateLabel.text = dateText
+      titleTextField.text = title
+      descriptionTextView.text = description
     }
   }
 }
