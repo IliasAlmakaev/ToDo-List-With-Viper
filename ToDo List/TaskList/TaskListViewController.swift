@@ -43,17 +43,40 @@ final class TaskListViewController: UIViewController {
   
   private let configurator: TaskListConfiguratorInputProtocol = TaskListConfigurator()
   private var activityIndicator: UIActivityIndicatorView?
+  private let searchController = UISearchController(searchResultsController: nil)
   private var rows: [TaskCellViewModelProtocol] = []
+  private var filteredRows: [TaskCellViewModelProtocol] = []
+  private var searchBarIsEmpty: Bool {
+    guard let text = searchController.searchBar.text else { return false }
+    return text.isEmpty
+  }
+  private var isFiltering: Bool {
+    searchController.isActive && !searchBarIsEmpty
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
     configurator.configure(withView: self)
     activityIndicator = showActivityIndicator(in: view)
+    setupSearchController()
     presenter.viewDidLoad()
   }
   
   @IBAction func createTaskButtonPressed() {
     presenter.createTaskButtonPressed()
+  }
+  
+  // MARK: - Private Methods
+  private func setupSearchController() {
+    searchController.searchResultsUpdater = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.searchBar.placeholder = "Search"
+    navigationItem.searchController = searchController
+    definesPresentationContext = true
+    
+    if let textField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+      textField.textColor = .white
+    }
   }
   
   private func showActivityIndicator(in view: UIView) -> UIActivityIndicatorView {
@@ -78,11 +101,11 @@ final class TaskListViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension TaskListViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    rows.count
+    isFiltering ? filteredRows.count : rows.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cellViewModel = rows[indexPath.row]
+    let cellViewModel = isFiltering ? filteredRows[indexPath.row] : rows[indexPath.row]
     let cell = tableView.dequeueReusableCell(withIdentifier: cellViewModel.cellIdentifier, for: indexPath)
     guard let cell = cell as? TaskCell else { return UITableViewCell() }
     cell.viewModel = cellViewModel
@@ -99,7 +122,6 @@ extension TaskListViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    
   }
   
   func tableView(
@@ -124,6 +146,22 @@ extension TaskListViewController: UITableViewDelegate {
     }
     
     return configuration
+  }
+}
+
+// MARK: - UISearchResultsUpdating
+extension TaskListViewController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    filterContentForSearchText(searchController.searchBar.text ?? "")
+  }
+  
+  private func filterContentForSearchText(_ searchText: String) {
+    filteredRows = rows.filter { row in
+      guard let titleTask = row.task.todo else { return false }
+      return titleTask.lowercased().contains(searchText.lowercased())
+    }
+    
+    tableView.reloadData()
   }
 }
 
