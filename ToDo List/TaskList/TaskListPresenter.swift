@@ -69,6 +69,7 @@ final class TaskListPresenter: TaskListViewOutputProtocol {
     dataStore.task = task
 
     interactor.deleteTask(with: dataStore)
+    setTaskCount(dataStore.tasks.count)
   }
   
   private func setTaskCount(_ taskCount: Int) {
