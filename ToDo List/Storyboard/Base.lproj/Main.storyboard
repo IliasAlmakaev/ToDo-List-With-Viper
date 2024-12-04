@@ -71,6 +71,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="separatorInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                         <connections>
                                             <outlet property="checkButton" destination="3Jx-FS-6IU" id="dMK-mE-EE2"/>
                                             <outlet property="dateLabel" destination="ejW-f8-QfH" id="ue5-lK-03x"/>

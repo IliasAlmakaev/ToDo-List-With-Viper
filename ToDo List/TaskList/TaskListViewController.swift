@@ -22,6 +22,7 @@ protocol TaskListViewOutputProtocol {
   func editTask(withIndexRow indexRow: Int)
   func updateTask(_ task: Task)
   func checkTask(_ task: Task, indexPath: IndexPath)
+  func deleteTask(_ task: Task, indexRow: Int)
 }
 
 protocol TaskDetailsViewControllerDelegate: AnyObject {
@@ -66,6 +67,12 @@ final class TaskListViewController: UIViewController {
     
     return activityIndicator
   }
+  
+  private func deleteTask(withIndexPath indexPath: IndexPath) {
+    let task = rows.remove(at: indexPath.row).task
+    tableView.deleteRows(at: [indexPath], with: .automatic)
+    presenter.deleteTask(task, indexRow: indexPath.row)
+  }
 }
 
 // MARK: - UITableViewDataSource
@@ -107,8 +114,8 @@ extension TaskListViewController: UITableViewDelegate {
         presenter.editTask(withIndexRow: indexPath.row)
       }
       
-      let deleteAction = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { action in
-        
+      let deleteAction = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { [unowned self] action in
+        deleteTask(withIndexPath: indexPath)
       }
       
       let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [editAction, deleteAction])

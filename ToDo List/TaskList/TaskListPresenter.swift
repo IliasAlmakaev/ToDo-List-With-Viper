@@ -63,6 +63,14 @@ final class TaskListPresenter: TaskListViewOutputProtocol {
     interactor.checkTask(with: dataStore)
   }
   
+  func deleteTask(_ task: Task, indexRow: Int) {
+    dataStore?.tasks.remove(at: indexRow)
+    guard var dataStore = dataStore else { return }
+    dataStore.task = task
+
+    interactor.deleteTask(with: dataStore)
+  }
+  
   private func setTaskCount(_ taskCount: Int) {
     let taskCountText = "\(taskCount) задач (и)"
     view.setTaskCount(withText: taskCountText)
