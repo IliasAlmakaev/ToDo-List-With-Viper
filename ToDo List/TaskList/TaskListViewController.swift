@@ -129,6 +129,9 @@ extension TaskListViewController: UITableViewDelegate {
     contextMenuConfigurationForRowAt indexPath: IndexPath,
     point: CGPoint
   ) -> UIContextMenuConfiguration? {
+    if isFiltering {
+      return nil
+    }
     
     let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { menuElements in
       
