@@ -12,6 +12,7 @@ protocol TaskListViewInputProtocol: AnyObject {
   func setTaskCount(withText text: String)
   func addTask(for row: TaskCellViewModel)
   func updateTask(for row: TaskCellViewModel, withIndexRow indexRow: Int)
+  func updateTask(for row: TaskCellViewModel, withIndexPath indexPath: IndexPath)
 }
 
 protocol TaskListViewOutputProtocol {
@@ -20,11 +21,16 @@ protocol TaskListViewOutputProtocol {
   func addTask(_ task: Task)
   func editTask(withIndexRow indexRow: Int)
   func updateTask(_ task: Task)
+  func checkTask(_ task: Task, indexPath: IndexPath)
 }
 
 protocol TaskDetailsViewControllerDelegate: AnyObject {
   func saveTask(_ task: Task)
   func editTask(_ task: Task)
+}
+
+protocol TaskCellDelegate: AnyObject {
+  func checkTask(withTask task: Task, andCell cell: TaskCell)
 }
 
 final class TaskListViewController: UIViewController {
@@ -73,6 +79,7 @@ extension TaskListViewController: UITableViewDataSource {
     let cell = tableView.dequeueReusableCell(withIdentifier: cellViewModel.cellIdentifier, for: indexPath)
     guard let cell = cell as? TaskCell else { return UITableViewCell() }
     cell.viewModel = cellViewModel
+    cell.viewModel?.delegate = self
     return cell
   }
 }
@@ -135,6 +142,11 @@ extension TaskListViewController: TaskListViewInputProtocol {
     rows[indexRow] = row
     tableView.reloadData()
   }
+  
+  func updateTask(for row: TaskCellViewModel, withIndexPath indexPath: IndexPath) {
+    rows[indexPath.row] = row
+    tableView.reloadRows(at: [indexPath], with: .automatic)
+  }
 }
 
 // MARK: - TaskDetailsViewControllerDelegate
@@ -145,6 +157,14 @@ extension TaskListViewController: TaskDetailsViewControllerDelegate {
   
   func editTask(_ task: Task) {
     presenter.updateTask(task)
+  }
+}
+
+// MARK: - TaskCellDelegate
+extension TaskListViewController: TaskCellDelegate {
+  func checkTask(withTask task: Task, andCell cell: TaskCell) {
+    guard let indexPath = tableView.indexPath(for: cell) else { return }
+    presenter.checkTask(task, indexPath: indexPath)
   }
 }
 

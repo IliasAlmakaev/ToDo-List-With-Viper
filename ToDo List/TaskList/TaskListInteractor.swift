@@ -9,10 +9,12 @@ import Foundation
 
 protocol TaskListInteractorInputProtocol {
   func fetchTasks()
+  func checkTask(with dataStore: TaskListDataStore)
 }
 
 protocol TaskListInteractorOutputProtocol: AnyObject {
   func tasksDidReceive(with dataStore: TaskListDataStore)
+  func checkTask(with dataStore: TaskListDataStore)
 }
 
 final class TaskListInteractor: TaskListInteractorInputProtocol {
@@ -32,6 +34,14 @@ final class TaskListInteractor: TaskListInteractorInputProtocol {
     } else {
       fetchTodosFromCoreData()
     }
+  }
+  
+  func checkTask(with dataStore: TaskListDataStore) {
+    guard let task = dataStore.task else { return }
+    var completed = task.completed
+    completed.toggle()
+    storageManager.checkTask(task, completed: completed)
+    presenter.checkTask(with: dataStore)
   }
   
   private func saveTodos(_ todos: [Todo]) {

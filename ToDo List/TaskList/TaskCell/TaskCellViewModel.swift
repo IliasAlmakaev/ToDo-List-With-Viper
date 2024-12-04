@@ -14,6 +14,8 @@ protocol TaskCellViewModelProtocol {
   var fullDescription: String? { get }
   var date: String { get }
   var completed: Bool { get }
+  var task: Task { get }
+  var delegate: TaskCellDelegate? { get set }
   init(task: Task)
 }
 
@@ -42,7 +44,8 @@ final class TaskCellViewModel: TaskCellViewModelProtocol {
     task.completed
   }
   
-  private let task: Task
+  let task: Task
+  var delegate: TaskCellDelegate?
   
   init(task: Task) {
     self.task = task

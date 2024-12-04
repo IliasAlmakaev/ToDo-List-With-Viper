@@ -10,6 +10,8 @@ import Foundation
 struct TaskListDataStore {
   var tasks: [Task]
   var selectedIndexRow: Int? = nil
+  var selectedIndexPath: IndexPath? = nil
+  var task: Task? = nil
 }
 
 final class TaskListPresenter: TaskListViewOutputProtocol {
@@ -54,6 +56,13 @@ final class TaskListPresenter: TaskListViewOutputProtocol {
     view.updateTask(for: row, withIndexRow: selectedIndexRow)
   }
   
+  func checkTask(_ task: Task, indexPath: IndexPath) {
+    guard var dataStore = dataStore else { return }
+    dataStore.task = task
+    dataStore.selectedIndexPath = indexPath
+    interactor.checkTask(with: dataStore)
+  }
+  
   private func setTaskCount(_ taskCount: Int) {
     let taskCountText = "\(taskCount) задач (и)"
     view.setTaskCount(withText: taskCountText)
@@ -68,5 +77,14 @@ extension TaskListPresenter: TaskListInteractorOutputProtocol {
     
     view.reloadData(for: rows)
     setTaskCount(rows.count)
+  }
+  
+  func checkTask(with dataStore: TaskListDataStore) {
+    guard let task = dataStore.task, let selectedIndexPath = dataStore.selectedIndexPath else { return }
+    self.dataStore = dataStore
+    
+    let row = TaskCellViewModel(task: task)
+    self.dataStore?.tasks[selectedIndexPath.row] = task
+    view.updateTask(for: row, withIndexPath: selectedIndexPath)
   }
 }
